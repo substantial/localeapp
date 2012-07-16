@@ -9,9 +9,10 @@ module I18n::Backend::Base
       sender = Localeapp::Sender.new
 
       # Make the default value a complete translation
-      sender.post_translation(locale, object, options, result)
+      sender.post_translation(locale, object || @last_object, options, result)
     end
 
+    @last_object = options[:fallback] ? object : nil
     return result
   end
 end
