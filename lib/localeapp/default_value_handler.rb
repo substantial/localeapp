@@ -7,8 +7,9 @@ module I18n::Backend::Base
     when Array
       # Do nothing, we only send missing translations with text defaults
     else
-      Localeapp.missing_translations.add(locale, object, subject, options)
+      Localeapp.missing_translations.add(locale, object || @last_object, subject, options)
     end
+    @last_object = options[:fallback] ? object : nil
     return result
   end
 end
