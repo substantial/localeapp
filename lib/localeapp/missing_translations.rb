@@ -2,6 +2,11 @@ module Localeapp
   MissingTranslationRecord = Struct.new(:key, :locale, :description, :options)
 
   class MissingTranslations
+    class << self
+      attr_accessor :sent_translations
+    end
+    self.sent_translations = {}
+
     def initialize
       @translations = Hash.new { |h, k| h[k] = {} }
     end
@@ -28,7 +33,11 @@ module Localeapp
           missing_data[:locale] = locale
           missing_data[:description] = record.description if record.description
           missing_data[:options] = record.options
-          data << missing_data
+
+          unless self.class.sent_translations[missing_data]
+            data << missing_data
+            self.class.sent_translations[missing_data] = true
+          end
         end
       end
       data
